@@ -111,8 +111,7 @@ button:focus-visible {
 .rhap_container {
   position: fixed !important;
   bottom: env(safe-area-inset-bottom, 0) !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
+  left: 1rem !important;
   z-index: 1000 !important;
   margin-bottom: 1rem !important;
 }
@@ -121,5 +120,7 @@ button:focus-visible {
   .rhap_container {
     width: 90% !important;
     margin-bottom: 0.5rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
   }
 }
