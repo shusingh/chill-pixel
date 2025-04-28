@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { chakra, Flex, Icon, Text } from '@chakra-ui/react';
+import { chakra, Flex, Icon, Text, useBreakpointValue } from '@chakra-ui/react';
 import { LuMinimize2, LuMaximize2 } from 'react-icons/lu';
 import { FaGithub } from 'react-icons/fa';
 import { FaCode } from 'react-icons/fa';
@@ -14,6 +14,7 @@ const ChakraLink = chakra('a');
  */
 const Header: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const showFullscreenButton = useBreakpointValue({ base: false, md: true });
 
   const toggleFs = () => {
     if (screenfull.isEnabled) screenfull.toggle();
@@ -49,20 +50,22 @@ const Header: React.FC = () => {
       </Text>
 
       <Flex gap={7}>
-        <ChakraButton
-          type="button"
-          onClick={toggleFs}
-          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-          p={0}
-          m={0}
-          bg="transparent"
-          border="none"
-          cursor="pointer"
-          _hover={{ opacity: 0.8 }}
-          _focus={{ outline: 'none' }}
-        >
-          <Icon as={isFullscreen ? LuMinimize2 : LuMaximize2} boxSize={6} color="white" />
-        </ChakraButton>
+        {showFullscreenButton && (
+          <ChakraButton
+            type="button"
+            onClick={toggleFs}
+            aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+            p={0}
+            m={0}
+            bg="transparent"
+            border="none"
+            cursor="pointer"
+            _hover={{ opacity: 0.8 }}
+            _focus={{ outline: 'none' }}
+          >
+            <Icon as={isFullscreen ? LuMinimize2 : LuMaximize2} boxSize={6} color="white" />
+          </ChakraButton>
+        )}
 
         <ChakraLink
           href="https://github.com/shusingh"

@@ -13,6 +13,16 @@ body,
   overflow: hidden;
 }
 
+/* Fix for mobile viewport height */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+  html {
+    height: -webkit-fill-available;
+  }
+}
+
 :root {
   font-family:
     'JetBrains Mono', 'Fira Code', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', 'Courier New',
@@ -30,6 +40,9 @@ body,
 
 body {
   min-width: 320px;
+  /* Ensure content is always visible on mobile */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 a {
@@ -92,4 +105,21 @@ button:focus-visible {
   pointer-events: none;
   opacity: 0.6;
   z-index: 2;
+}
+
+/* Ensure audio player is always visible */
+.rhap_container {
+  position: fixed !important;
+  bottom: env(safe-area-inset-bottom, 0) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+  margin-bottom: 1rem !important;
+}
+
+@media (max-width: 640px) {
+  .rhap_container {
+    width: 90% !important;
+    margin-bottom: 0.5rem !important;
+  }
 }
