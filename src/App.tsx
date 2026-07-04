@@ -1,5 +1,4 @@
 import React from 'react';
-import { VStack } from '@chakra-ui/react';
 import Header from './components/Header';
 import LandingPage from './pages/Landing/LandingPage';
 
@@ -9,10 +8,10 @@ import LandingPage from './pages/Landing/LandingPage';
  */
 const App: React.FC = () => {
   return (
-    <VStack w="100vw" h="100vh" gap={0} overflow="hidden">
+    <>
       <Header />
       <LandingPage />
-    </VStack>
+    </>
   );
 };
 

@@ -1,0 +1,20 @@
+.scene {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scene-btn {
+  padding: 8px 10px;
+  font-size: 9px;
+}
+
+.scene-name {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--paper);
+  min-width: 110px;
+  text-align: center;
+  white-space: nowrap;
+}

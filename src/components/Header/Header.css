@@ -1,0 +1,65 @@
+.cp-header {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  right: 30px;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cp-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: var(--paper);
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.cp-logo em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.cp-links {
+  display: flex;
+  gap: 16px;
+}
+
+.cp-link {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--paper);
+  text-decoration: none;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.cp-link:hover {
+  color: var(--amber);
+}
+
+@media (max-width: 640px) {
+  .cp-header {
+    top: 16px;
+    left: 16px;
+    right: 16px;
+  }
+
+  .cp-logo {
+    font-size: 11px;
+  }
+
+  .cp-link {
+    font-size: 17px;
+  }
+
+  .cp-link-fs {
+    display: none;
+  }
+}

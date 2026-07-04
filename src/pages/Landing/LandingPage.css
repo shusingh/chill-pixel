@@ -1,0 +1,33 @@
+.landing {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.landing-deck {
+  position: absolute;
+  left: 34px;
+  bottom: 40px;
+  z-index: 3;
+}
+
+.landing-scene {
+  position: absolute;
+  right: 34px;
+  bottom: 40px;
+  z-index: 3;
+}
+
+@media (max-width: 640px) {
+  .landing-deck {
+    left: 16px;
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  .landing-scene {
+    right: 16px;
+    bottom: max(226px, calc(env(safe-area-inset-bottom, 16px) + 210px));
+  }
+}

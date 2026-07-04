@@ -1,39 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Box, VStack } from '@chakra-ui/react';
+import React, { useMemo, useState } from 'react';
 import Background from '../../components/Background';
 import AudioPlayer from '../../components/AudioPlayer';
+import SceneSwitcher from '../../components/SceneSwitcher';
 import { GIF_LIST } from '../../constants/gifs';
 import { shuffle } from '../../utils/array';
+import './LandingPage.css';
+
+/** Turns "/gifs/sakura-chill.gif" into "sakura chill" */
+function sceneName(src: string): string {
+  const file = src.split('/').pop() ?? src;
+  return file.replace(/\.gif$/i, '').replace(/-/g, ' ');
+}
 
 /**
- * Landing page component that displays a rotating background with audio player
+ * Landing page: pixel-art scene with the player deck and scene switcher over it.
+ * Scenes and music are independent; skipping a track no longer swaps the scene.
  * @returns {JSX.Element} Landing page with animated background and audio controls
  */
 const LandingPage: React.FC = () => {
-  const [shuffledGifs, setShuffledGifs] = useState<string[]>([]);
+  const shuffledGifs = useMemo(() => shuffle(GIF_LIST), []);
   const [idx, setIdx] = useState(0);
-
-  // Reshuffle GIFs whenever the index changes
-  useEffect(() => {
-    setShuffledGifs(shuffle(GIF_LIST));
-  }, [idx]);
 
   const next = () => setIdx(i => (i + 1) % shuffledGifs.length);
   const prev = () => setIdx(i => (i === 0 ? shuffledGifs.length - 1 : i - 1));
 
-  // Don't render until we have shuffled GIFs
-  if (shuffledGifs.length === 0) return null;
-
   return (
-    <Box position="relative" w="100vw" h="100vh" overflow="hidden">
+    <div className="landing">
+      <Background src={shuffledGifs[idx]} />
       <div id="darken" />
       <div id="vignette" />
-      <Background src={shuffledGifs[idx]} />
+      <div id="scanlines" />
 
-      <VStack position="absolute" inset={0} justify="flex-end" align="flex-start" p={4} zIndex={3}>
-        <AudioPlayer onNext={next} onPrev={prev} />
-      </VStack>
-    </Box>
+      <div className="landing-deck">
+        <AudioPlayer />
+      </div>
+      <div className="landing-scene">
+        <SceneSwitcher name={sceneName(shuffledGifs[idx])} onPrev={prev} onNext={next} />
+      </div>
+    </div>
   );
 };
 

@@ -1,8 +1,29 @@
+:root {
+  --ink: #14101f;
+  --ink-2: #2b2440;
+  --amber: #ffb454;
+  --amber-2: #e89a35;
+  --rose: #e6739f;
+  --mint: #7ee0b8;
+  --paper: #f3ead8;
+  --paper-dim: rgba(243, 234, 216, 0.55);
+
+  font-family: 'VT323', 'JetBrains Mono', 'Menlo', monospace;
+  line-height: 1.5;
+  color: var(--paper);
+  background-color: var(--ink);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
@@ -15,84 +36,63 @@ body,
 
 /* Fix for mobile viewport height */
 @supports (-webkit-touch-callout: none) {
-  .min-h-screen {
-    min-height: -webkit-fill-available;
-  }
   html {
     height: -webkit-fill-available;
   }
 }
 
-:root {
-  font-family:
-    'JetBrains Mono', 'Fira Code', 'Source Code Pro', 'Menlo', 'Monaco', 'Consolas', 'Courier New',
-    monospace;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
   min-width: 320px;
-  /* Ensure content is always visible on mobile */
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: none;
+/* Chunky pixel-corner frame shared by the deck and the scene switcher */
+.px-border {
+  position: relative;
+  background: var(--ink);
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink),
+    0 -8px 0 0 var(--paper),
+    0 8px 0 0 var(--paper),
+    -8px 0 0 0 var(--paper),
+    8px 0 0 0 var(--paper),
+    -4px -4px 0 0 var(--paper),
+    4px -4px 0 0 var(--paper),
+    -4px 4px 0 0 var(--paper),
+    4px 4px 0 0 var(--paper);
 }
 
-a:hover {
-  color: #535bf2;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.pxbtn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: var(--paper);
+  background: var(--ink-2);
+  border: none;
+  padding: 10px 12px;
   cursor: pointer;
-  transition: border-color 0.25s;
+  box-shadow:
+    inset -3px -3px 0 0 rgba(0, 0, 0, 0.45),
+    inset 3px 3px 0 0 rgba(255, 255, 255, 0.12);
 }
 
-button:hover {
-  border-color: #646cff;
+.pxbtn:active {
+  box-shadow: inset 3px 3px 0 0 rgba(0, 0, 0, 0.45);
+  transform: translateY(1px);
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.pxbtn.primary {
+  background: var(--amber);
+  color: var(--ink);
 }
 
 #darken {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(8, 6, 16, 0.32);
   z-index: 1;
   pointer-events: none;
 }
@@ -100,27 +100,22 @@ button:focus-visible {
 #vignette {
   position: absolute;
   inset: 0;
-  background: url(/vignette.png) no-repeat center/cover;
-  mix-blend-mode: overlay;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(5, 3, 12, 0.55) 100%);
   pointer-events: none;
-  opacity: 0.6;
   z-index: 2;
 }
 
-/* Ensure audio player is always visible */
-.rhap_container {
-  position: fixed !important;
-  bottom: env(safe-area-inset-bottom, 0) !important;
-  left: 1rem !important;
-  z-index: 1000 !important;
-  margin-bottom: 1rem !important;
+#scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 2;
 }
 
-@media (max-width: 640px) {
-  .rhap_container {
-    width: 90% !important;
-    margin-bottom: 0.5rem !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+@keyframes px-blink {
+  50% {
+    opacity: 0.15;
   }
 }

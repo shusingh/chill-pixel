@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chill Pixel — UI concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #14101f;
+    --amber: #ffb454;
+    --rose: #e6739f;
+    --mint: #7ee0b8;
+    --paper: #f3ead8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+
+  /* ---------- shared stage ---------- */
+  .stage {
+    position: fixed; inset: 0;
+    background-size: cover; background-position: center;
+    image-rendering: pixelated;
+    transition: opacity .5s ease;
+  }
+  .stage.fading { opacity: 0; }
+  .darken { position: fixed; inset: 0; background: rgba(8,6,16,.32); pointer-events: none; }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(5,3,12,.55) 100%);
+  }
+  .scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+    transition: opacity .3s;
+  }
+  body[data-variant="a"] .scanlines, body[data-variant="c"] .scanlines { opacity: .5; }
+
+  .variant { position: fixed; inset: 0; z-index: 5; display: none; }
+  body[data-variant="a"] #variant-a { display: block; }
+  body[data-variant="b"] #variant-b { display: block; }
+  body[data-variant="c"] #variant-c { display: block; }
+
+  /* ---------- variant switcher ---------- */
+  .switcher {
+    position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+    z-index: 50; display: flex; gap: 6px; padding: 6px;
+    background: rgba(10,8,18,.72); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.14); border-radius: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .switcher button {
+    border: 1px solid transparent; background: transparent; color: rgba(255,255,255,.65);
+    font: 500 12px/1 'Space Grotesk', sans-serif; letter-spacing: .04em;
+    padding: 7px 12px; border-radius: 7px; cursor: pointer;
+  }
+  .switcher button.on { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.18); }
+  .switcher .hint { align-self: center; color: rgba(255,255,255,.4); font-size: 11px; padding: 0 8px 0 4px; }
+
+  /* =========================================================
+     VARIANT A — PIXEL DECK
+     ========================================================= */
+  .px-border {
+    position: relative;
+    background: var(--ink);
+    box-shadow:
+      0 -4px 0 0 var(--ink), 0 4px 0 0 var(--ink),
+      -4px 0 0 0 var(--ink), 4px 0 0 0 var(--ink),
+      0 -8px 0 0 var(--paper), 0 8px 0 0 var(--paper),
+      -8px 0 0 0 var(--paper), 8px 0 0 0 var(--paper),
+      -4px -4px 0 0 var(--paper), 4px -4px 0 0 var(--paper),
+      -4px 4px 0 0 var(--paper), 4px 4px 0 0 var(--paper);
+  }
+  #variant-a .hdr {
+    position: absolute; top: 26px; left: 30px; right: 30px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'Press Start 2P', monospace;
+  }
+  #variant-a .logo { color: var(--paper); font-size: 13px; text-shadow: 3px 3px 0 rgba(0,0,0,.6); }
+  #variant-a .logo em { color: var(--amber); font-style: normal; }
+  #variant-a .hdr-icons { display: flex; gap: 18px; }
+  #variant-a .hdr-icons button {
+    background: none; border: none; cursor: pointer;
+    font-family: 'VT323', monospace; font-size: 20px; color: var(--paper);
+    text-shadow: 2px 2px 0 rgba(0,0,0,.6);
+  }
+  #variant-a .hdr-icons button:hover { color: var(--amber); }
+
+  #variant-a .deck {
+    position: absolute; left: 34px; bottom: 40px; width: 372px; padding: 16px 18px 14px;
+  }
+  #variant-a .np-label {
+    font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--amber);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  #variant-a .np-label .dot { width: 6px; height: 6px; background: var(--mint); animation: blink 1.2s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .15; } }
+  #variant-a .track { font-family: 'VT323', monospace; color: var(--paper); font-size: 26px; line-height: 1; margin-bottom: 2px; white-space: nowrap; overflow: hidden; }
+  #variant-a .artist { font-family: 'VT323', monospace; color: rgba(243,234,216,.55); font-size: 18px; margin-bottom: 12px; }
+  #variant-a .bar { height: 12px; background: #2b2440; margin-bottom: 6px; position: relative; cursor: pointer; }
+  #variant-a .bar .fill {
+    position: absolute; inset: 0 auto 0 0; width: 34%;
+    background: repeating-linear-gradient(to right, var(--amber) 0 8px, #e89a35 8px 12px);
+  }
+  #variant-a .times { display: flex; justify-content: space-between; font-family: 'VT323', monospace; font-size: 16px; color: rgba(243,234,216,.5); margin-bottom: 10px; }
+  #variant-a .controls { display: flex; align-items: center; gap: 14px; }
+  #variant-a .pxbtn {
+    font-family: 'Press Start 2P', monospace; font-size: 11px; color: var(--paper);
+    background: #2b2440; border: none; padding: 10px 12px; cursor: pointer;
+    box-shadow: inset -3px -3px 0 0 rgba(0,0,0,.45), inset 3px 3px 0 0 rgba(255,255,255,.12);
+  }
+  #variant-a .pxbtn:active { box-shadow: inset 3px 3px 0 0 rgba(0,0,0,.45); transform: translateY(1px); }
+  #variant-a .pxbtn.play { background: var(--amber); color: var(--ink); padding: 12px 16px; }
+  #variant-a .vol { margin-left: auto; display: flex; gap: 3px; align-items: flex-end; cursor: pointer; }
+  #variant-a .vol i { width: 5px; background: #2b2440; display: block; }
+  #variant-a .vol i.on { background: var(--mint); }
+  #variant-a .vol i:nth-child(1){height:6px} #variant-a .vol i:nth-child(2){height:9px}
+  #variant-a .vol i:nth-child(3){height:12px} #variant-a .vol i:nth-child(4){height:15px}
+  #variant-a .vol i:nth-child(5){height:18px}
+
+  #variant-a .scene {
+    position: absolute; right: 34px; bottom: 40px; padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #variant-a .scene .pxbtn { padding: 8px 10px; font-size: 9px; }
+  #variant-a .scene .name { font-family: 'VT323', monospace; color: var(--paper); font-size: 18px; min-width: 110px; text-align: center; }
+
+  /* =========================================================
+     VARIANT B — GLASS LOUNGE
+     ========================================================= */
+  #variant-b { font-family: 'Space Grotesk', sans-serif; }
+  #variant-b .hdr {
+    position: absolute; top: 22px; left: 28px; right: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #variant-b .logo { color: #fff; font-weight: 600; font-size: 15px; letter-spacing: .16em; text-transform: lowercase; }
+  #variant-b .logo::before { content: '● '; color: var(--rose); font-size: 10px; vertical-align: 2px; }
+  #variant-b .hdr-right { display: flex; gap: 8px; }
+  #variant-b .chip {
+    color: rgba(255,255,255,.85); font-size: 12.5px; font-weight: 500;
+    background: rgba(16,12,28,.45); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer;
+  }
+  #variant-b .chip:hover { background: rgba(255,255,255,.14); }
+
+  #variant-b .glass {
+    position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
+    width: min(560px, calc(100vw - 40px)); border-radius: 20px; padding: 16px 20px 14px;
+    background: rgba(14,10,26,.5); backdrop-filter: blur(18px) saturate(1.3);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+  }
+  #variant-b .row1 { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  #variant-b .art {
+    width: 46px; height: 46px; border-radius: 10px; flex: none;
+    background: linear-gradient(135deg, var(--rose), var(--amber));
+    display: grid; place-items: center; color: rgba(20,10,20,.8); font-size: 19px;
+  }
+  #variant-b .meta { min-width: 0; }
+  #variant-b .track { color: #fff; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #variant-b .artist { color: rgba(255,255,255,.55); font-size: 12.5px; }
+  #variant-b .row1 .scene-pill { margin-left: auto; display: flex; align-items: center; gap: 2px; }
+  #variant-b .scene-pill button { background: none; border: none; color: rgba(255,255,255,.7); font-size: 15px; cursor: pointer; padding: 4px 6px; }
+  #variant-b .scene-pill button:hover { color: #fff; }
+  #variant-b .scene-pill span { color: rgba(255,255,255,.45); font-size: 11.5px; letter-spacing: .05em; }
+  #variant-b .bar { height: 4px; border-radius: 4px; background: rgba(255,255,255,.16); position: relative; cursor: pointer; margin-bottom: 12px; }
+  #variant-b .bar .fill { position: absolute; inset: 0 auto 0 0; width: 34%; border-radius: 4px; background: linear-gradient(90deg, var(--rose), var(--amber)); }
+  #variant-b .bar .fill::after {
+    content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
+    width: 10px; height: 10px; border-radius: 50%; background: #fff;
+    box-shadow: 0 0 8px rgba(255,255,255,.7);
+  }
+  #variant-b .row2 { display: flex; align-items: center; gap: 16px; }
+  #variant-b .t { color: rgba(255,255,255,.5); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  #variant-b .mid { margin: 0 auto; display: flex; align-items: center; gap: 18px; }
+  #variant-b .ctl { background: none; border: none; color: rgba(255,255,255,.85); font-size: 17px; cursor: pointer; }
+  #variant-b .ctl:hover { color: #fff; }
+  #variant-b .play {
+    width: 42px; height: 42px; border-radius: 50%; border: none; cursor: pointer;
+    background: #fff; color: #16101f; font-size: 15px; display: grid; place-items: center;
+    box-shadow: 0 4px 18px rgba(255,255,255,.25);
+  }
+  #variant-b .vol { display: flex; align-items: center; gap: 8px; }
+  #variant-b .vol input { width: 70px; accent-color: var(--rose); height: 3px; cursor: pointer; }
+  #variant-b .vol .ic { color: rgba(255,255,255,.6); font-size: 13px; }
+
+  /* =========================================================
+     VARIANT C — RETRO OS
+     ========================================================= */
+  #variant-c { font-family: 'VT323', monospace; }
+  #variant-c .menubar {
+    position: absolute; top: 0; left: 0; right: 0; height: 34px; z-index: 6;
+    background: var(--paper); border-bottom: 3px solid var(--ink);
+    display: flex; align-items: center; gap: 20px; padding: 0 14px;
+    color: var(--ink); font-size: 19px;
+  }
+  #variant-c .menubar .brand { font-family: 'Press Start 2P', monospace; font-size: 10px; margin-right: 6px; }
+  #variant-c .menubar .item { cursor: pointer; padding: 2px 6px; }
+  #variant-c .menubar .item:hover { background: var(--ink); color: var(--paper); }
+  #variant-c .menubar .clock { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  #variant-c .win {
+    position: absolute; background: var(--paper); border: 3px solid var(--ink);
+    box-shadow: 8px 8px 0 rgba(5,3,12,.55); color: var(--ink);
+  }
+  #variant-c .titlebar {
+    background: var(--ink); color: var(--paper); font-size: 17px;
+    display: flex; align-items: center; padding: 3px 8px; gap: 8px; cursor: grab;
+  }
+  #variant-c .titlebar .dots { display: flex; gap: 4px; }
+  #variant-c .titlebar .dots i { width: 9px; height: 9px; border: 2px solid var(--paper); display: block; }
+  #variant-c .titlebar .dots i:first-child { background: var(--rose); border-color: var(--rose); }
+  #variant-c .player-win { left: 36px; bottom: 46px; width: 340px; }
+  #variant-c .player-body { padding: 12px 14px 14px; }
+  #variant-c .lcd {
+    background: #1d2b19; color: var(--mint); border: 3px solid var(--ink);
+    padding: 6px 10px 8px; margin-bottom: 10px;
+    text-shadow: 0 0 6px rgba(126,224,184,.55); font-size: 20px; line-height: 1.15;
+  }
+  #variant-c .lcd .small { font-size: 15px; opacity: .75; }
+  #variant-c .lcd .marquee { white-space: nowrap; overflow: hidden; }
+  #variant-c .cbar { height: 14px; border: 3px solid var(--ink); background: var(--paper); margin-bottom: 10px; position: relative; cursor: pointer; }
+  #variant-c .cbar .fill { position: absolute; inset: 0 auto 0 0; width: 34%; background: var(--rose); }
+  #variant-c .cctl { display: flex; gap: 8px; }
+  #variant-c .cctl button {
+    flex: 1; font-family: 'VT323', monospace; font-size: 20px; padding: 5px 0 6px;
+    background: var(--paper); color: var(--ink); border: 3px solid var(--ink); cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  #variant-c .cctl button:active { transform: translate(3px, 3px); box-shadow: none; }
+  #variant-c .cctl button.primary { background: var(--amber); }
+
+  #variant-c .scene-win { right: 36px; bottom: 46px; width: 210px; }
+  #variant-c .scene-body { padding: 10px 12px 12px; font-size: 19px; }
+  #variant-c .scene-body .name { text-align: center; margin-bottom: 8px; }
+  #variant-c .scene-body .row { display: flex; gap: 8px; }
+  #variant-c .scene-body button {
+    flex: 1; font-family: 'VT323', monospace; font-size: 18px; padding: 3px 0 4px;
+    background: var(--paper); border: 3px solid var(--ink); cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+  }
+  #variant-c .scene-body button:active { transform: translate(3px,3px); box-shadow: none; }
+
+  @media (max-width: 640px) {
+    #variant-a .deck { left: 16px; right: 16px; width: auto; }
+    #variant-a .scene { right: 16px; bottom: 190px; }
+    #variant-c .player-win { left: 14px; right: 14px; width: auto; }
+    #variant-c .scene-win { right: 14px; bottom: 250px; }
+  }
+</style>
+</head>
+<body data-variant="a">
+  <div class="stage" id="stage"></div>
+  <div class="darken"></div>
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
+
+  <nav class="switcher" aria-label="Concept switcher">
+    <button data-v="a" class="on">A · Pixel Deck</button>
+    <button data-v="b">B · Glass Lounge</button>
+    <button data-v="c">C · Retro OS</button>
+    <span class="hint">keys 1 / 2 / 3 · S = scene</span>
+  </nav>
+
+  <!-- ============ A: PIXEL DECK ============ -->
+  <section class="variant" id="variant-a">
+    <div class="hdr">
+      <div class="logo">CHILL<em>PIXEL</em></div>
+      <div class="hdr-icons">
+        <button title="Fullscreen">[ ]</button>
+        <button title="GitHub">&lt;/&gt;</button>
+      </div>
+    </div>
+    <div class="deck px-border">
+      <div class="np-label"><span class="dot"></span> NOW PLAYING</div>
+      <div class="track js-track">Midnight Convenience Store</div>
+      <div class="artist js-artist">tomorrow's flavor</div>
+      <div class="bar js-bar"><div class="fill js-fill"></div></div>
+      <div class="times"><span class="js-cur">01:12</span><span class="js-dur">03:29</span></div>
+      <div class="controls">
+        <button class="pxbtn js-prev">&#9664;&#9664;</button>
+        <button class="pxbtn play js-play">&#9654;</button>
+        <button class="pxbtn js-next">&#9654;&#9654;</button>
+        <div class="vol js-vol"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="scene px-border">
+      <button class="pxbtn js-scene-prev">&#9664;</button>
+      <div class="name js-scene-name">sakura chill</div>
+      <button class="pxbtn js-scene-next">&#9654;</button>
+    </div>
+  </section>
+
+  <!-- ============ B: GLASS LOUNGE ============ -->
+  <section class="variant" id="variant-b">
+    <div class="hdr">
+      <div class="logo">chillpixel</div>
+      <div class="hdr-right">
+        <button class="chip">⛶ fullscreen</button>
+        <button class="chip">github</button>
+      </div>
+    </div>
+    <div class="glass">
+      <div class="row1">
+        <div class="art">♪</div>
+        <div class="meta">
+          <div class="track js-track">Midnight Convenience Store</div>
+          <div class="artist js-artist">tomorrow's flavor</div>
+        </div>
+        <div class="scene-pill">
+          <button class="js-scene-prev">‹</button>
+          <span class="js-scene-name">sakura chill</span>
+          <button class="js-scene-next">›</button>
+        </div>
+      </div>
+      <div class="bar js-bar"><div class="fill js-fill"></div></div>
+      <div class="row2">
+        <span class="t js-cur">1:12</span>
+        <div class="mid">
+          <button class="ctl js-prev">⏮</button>
+          <button class="play js-play">▶</button>
+          <button class="ctl js-next">⏭</button>
+        </div>
+        <div class="vol"><span class="ic">🔊</span><input type="range" min="0" max="100" value="60" /></div>
+        <span class="t js-dur">3:29</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ C: RETRO OS ============ -->
+  <section class="variant" id="variant-c">
+    <div class="menubar">
+      <span class="brand">CHILL·PIXEL</span>
+      <span class="item">radio</span>
+      <span class="item">scenes</span>
+      <span class="item">fullscreen</span>
+      <span class="item">github</span>
+      <span class="clock js-clock">9:41 pm</span>
+    </div>
+    <div class="win player-win">
+      <div class="titlebar"><span class="dots"><i></i><i></i></span> now_playing.exe</div>
+      <div class="player-body">
+        <div class="lcd">
+          <div class="marquee js-track">Midnight Convenience Store</div>
+          <div class="small js-artist">tomorrow's flavor · 01:12 / 03:29</div>
+        </div>
+        <div class="cbar js-bar"><div class="fill js-fill"></div></div>
+        <div class="cctl">
+          <button class="js-prev">|&#9664;</button>
+          <button class="primary js-play">PLAY &#9654;</button>
+          <button class="js-next">&#9654;|</button>
+        </div>
+      </div>
+    </div>
+    <div class="win scene-win">
+      <div class="titlebar"><span class="dots"><i></i><i></i></span> scenes.exe</div>
+      <div class="scene-body">
+        <div class="name js-scene-name">sakura-chill.gif</div>
+        <div class="row">
+          <button class="js-scene-prev">&#9664; prev</button>
+          <button class="js-scene-next">next &#9654;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+  const SCENES = [
+    ['sakura chill', '../public/gifs/sakura-chill.gif'],
+    ['evening', '../public/gifs/evening.gif'],
+    ['chill car', '../public/gifs/chill-car.gif'],
+    ['rain cat', '../public/gifs/rain-cat.gif'],
+    ['train ride', '../public/gifs/train-ride.gif'],
+    ['city line', '../public/gifs/city-line.gif'],
+  ];
+  const TRACKS = [
+    ['Midnight Convenience Store', "tomorrow's flavor", 209],
+    ['Paper Planes Over Osaka', 'kissaten club', 187],
+    ['Slow Rain, Warm Room', 'bedroom ghost', 243],
+  ];
+  let scene = 0, track = 0, playing = true, pos = 72;
+  const stage = document.getElementById('stage');
+
+  function fmt(s) { return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0'); }
+  function setScene(i) {
+    scene = (i + SCENES.length) % SCENES.length;
+    stage.classList.add('fading');
+    setTimeout(() => {
+      stage.style.backgroundImage = `url(${SCENES[scene][1]})`;
+      stage.classList.remove('fading');
+    }, 250);
+    document.querySelectorAll('.js-scene-name').forEach((el, idx) => {
+      el.textContent = el.closest('#variant-c') ? SCENES[scene][1].split('/').pop() : SCENES[scene][0];
+    });
+  }
+  function setTrack(i) {
+    track = (i + TRACKS.length) % TRACKS.length; pos = 0;
+    document.querySelectorAll('.js-track').forEach(el => el.textContent = TRACKS[track][0]);
+    document.querySelectorAll('#variant-a .js-artist, #variant-b .js-artist').forEach(el => el.textContent = TRACKS[track][1]);
+    render();
+  }
+  function render() {
+    const dur = TRACKS[track][2];
+    document.querySelectorAll('.js-fill').forEach(el => el.style.width = (pos/dur*100) + '%');
+    document.querySelectorAll('.js-cur').forEach(el => el.textContent = fmt(pos));
+    document.querySelectorAll('.js-dur').forEach(el => el.textContent = fmt(dur));
+    const cArtist = document.querySelector('#variant-c .js-artist');
+    if (cArtist) cArtist.textContent = TRACKS[track][1] + ' · ' + fmt(pos) + ' / ' + fmt(dur);
+    document.querySelectorAll('.js-play').forEach(el => {
+      const isC = !!el.closest('#variant-c');
+      el.innerHTML = playing ? (isC ? 'PAUSE &#9646;&#9646;' : '&#9646;&#9646;') : (isC ? 'PLAY &#9654;' : '&#9654;');
+    });
+  }
+  setInterval(() => { if (playing) { pos += 1; if (pos >= TRACKS[track][2]) setTrack(track + 1); render(); } }, 1000);
+
+  document.querySelectorAll('.js-play').forEach(b => b.onclick = () => { playing = !playing; render(); });
+  document.querySelectorAll('.js-next').forEach(b => b.onclick = () => setTrack(track + 1));
+  document.querySelectorAll('.js-prev').forEach(b => b.onclick = () => setTrack(track - 1));
+  document.querySelectorAll('.js-scene-next').forEach(b => b.onclick = () => setScene(scene + 1));
+  document.querySelectorAll('.js-scene-prev').forEach(b => b.onclick = () => setScene(scene - 1));
+  document.querySelectorAll('.js-bar').forEach(bar => bar.onclick = e => {
+    const r = bar.getBoundingClientRect();
+    pos = Math.round((e.clientX - r.left) / r.width * TRACKS[track][2]); render();
+  });
+  document.querySelector('#variant-a .js-vol').onclick = e => {
+    const bars = [...e.currentTarget.children];
+    const i = bars.indexOf(e.target);
+    if (i >= 0) bars.forEach((b, j) => b.classList.toggle('on', j <= i));
+  };
+
+  const swBtns = document.querySelectorAll('.switcher [data-v]');
+  function setVariant(v) {
+    document.body.dataset.variant = v;
+    swBtns.forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  }
+  swBtns.forEach(b => b.onclick = () => setVariant(b.dataset.v));
+  document.addEventListener('keydown', e => {
+    if (e.key === '1') setVariant('a');
+    if (e.key === '2') setVariant('b');
+    if (e.key === '3') setVariant('c');
+    if (e.key.toLowerCase() === 's') setScene(scene + 1);
+  });
+
+  function tickClock() {
+    const d = new Date();
+    let h = d.getHours(); const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12;
+    const el = document.querySelector('.js-clock');
+    if (el) el.textContent = h + ':' + String(d.getMinutes()).padStart(2,'0') + ' ' + ap;
+  }
+  tickClock(); setInterval(tickClock, 15000);
+
+  const hash = location.hash.replace('#', '');
+  if (['a','b','c'].includes(hash)) setVariant(hash);
+
+  setScene(0); setTrack(0);
+</script>
+</body>
+</html>

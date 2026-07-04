@@ -1,0 +1,117 @@
+.deck {
+  width: 372px;
+  padding: 16px 18px 14px;
+}
+
+.deck-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--amber);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.deck-label-off {
+  color: var(--rose);
+}
+
+.deck-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--mint);
+}
+
+.deck-dot-live {
+  animation: px-blink 1.2s steps(2) infinite;
+}
+
+.deck-dot-off {
+  background: var(--rose);
+}
+
+.deck-track {
+  font-family: 'VT323', monospace;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--paper);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-muted {
+  color: var(--paper-dim);
+  font-size: 20px;
+}
+
+.deck-artist {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: var(--paper-dim);
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-bar {
+  height: 12px;
+  background: var(--ink-2);
+  margin-bottom: 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+.deck-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: repeating-linear-gradient(to right, var(--amber) 0 8px, var(--amber-2) 8px 12px);
+}
+
+.deck-times {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: var(--paper-dim);
+  margin-bottom: 10px;
+}
+
+.deck-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.deck-play {
+  padding: 12px 16px;
+}
+
+.deck-volume {
+  margin-left: auto;
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+
+.deck-volbar {
+  width: 5px;
+  padding: 0;
+  border: none;
+  background: var(--ink-2);
+  cursor: pointer;
+  display: block;
+}
+
+.deck-volbar.on {
+  background: var(--mint);
+}
+
+@media (max-width: 640px) {
+  .deck {
+    width: 100%;
+  }
+}

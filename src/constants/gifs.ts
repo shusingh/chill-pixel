@@ -19,5 +19,5 @@ export const GIF_LIST: string[] = [
   '/gifs/flying-girl.gif',
   '/gifs/rain-cat.gif',
   '/gifs/rain-chill.gif',
-  '/gifs/seeking-blue.gif'
+  '/gifs/seeking-blue.gif',
 ];
